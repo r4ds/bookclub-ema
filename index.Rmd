@@ -59,17 +59,22 @@ If you feel comfortable sharing, unmute or raise your hand!
 -  **Who** are you?
 -  **Where** are you joining from?
 -  **Previous clubs?** (R4DS or other)
--  **How long** have you been using R?
+-  **How long** have you been using R or Python?
 -  **What** are you most looking forward to learning?
 
 
 ## Before reading this book {-}
 
-You should have some experience:
+- You should know how to use R or Python
 
-- Using R ([R for Data Science](https://r4ds.hadley.nz/)) or Python ([Python for Data Analysis](https://wesmckinney.com/book/))
+[R for Data Science](https://r4ds.hadley.nz/) | [Python for Data Analysis](https://wesmckinney.com/book/)
+:-------------------------:|:-------------------------:
+![](img/00-welcome/08-r-for-ds.jpg)  |  ![](img/00-welcome/09-python-for-data-analysis.png)
 
-- Training, re-sampling, evaluating, and tuning models by using packages like:
+
+## Before reading this book {-}
+
+-  You should know how to training, re-sampling, evaluating, and tuning models by using packages like:
   - `CatBoost`
   - `LightGBM`
   - `XGBoost`
@@ -77,14 +82,26 @@ You should have some experience:
   - `H2O`
   - `Tidymodels` or `Scikit-learn`
 
-![From: Hands-On Machine Learning with R](img/00-welcome/01-modeling-process.png)
+![From: Hands-On Machine Learning with R](img/00-welcome/01-modeling-process.png){width=63.33% height=95% fig-align="center"}
 
 
-## A note {-}
+## What will we learn? {-}
+
+- How to determine which **explanatory variables** affect a model's prediction for a **single observation**.
+  - Break-down plots
+  - Ceteris-paribus profiles
+  - Local-model approximations
+  - Shapley values;
+
+- Techniques to examine predictive **models as a whole**.
+  - Partial-dependence plots
+  - Variable-importance plots
   
--  You are not expected to know everything.
-   -  We are all learning.
-   -  None of us is as smart as all of us.
-   -  It's okay to say "I don't know."
-   -  We can stop at anytime to discuss.
+- **Charts** that can be used to present the key information in a quick way
+
+- Tools and methods for **model comparison**
+
+## What will we learn? {-}
+
+![](img/00-welcome/07-chapter-piramide.png){width=69.69697% height=95% fig-align="center"}
 

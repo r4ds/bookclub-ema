@@ -1,8 +1,22 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Introduction
 
 **Learning objectives:**
 
-- THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY
+- Introduce the concept of predictive models.
+
+- Detail the evolution of statistical models.
+
+- Highlight the challenges and risks associated with advanced predictive models.
+
+- Emphasize the importance of model exploration tools to:
+  - Understand
+  - Evaluate
+  - Assure ethical compliance
 
 ## Purpose of Predictive Models {-}
 
@@ -57,7 +71,7 @@ We can predict:
 
 ## A New Modeling Process {-}
 
-![](img/00-welcome/02-UMEP-Importance.png)
+![](img/00-welcome/02-UMEP-Importance.png){width=80% height=80%}
 
 ## We need more tools {-}
 
@@ -88,18 +102,17 @@ The true bottleneck in predictive modelling is the lack of tools for **model exp
 |Coefficients|Parameters|
 
 
-## Level of Explanation Methods {-}
+## Terminology {-}
 
-- **Instance-level**: They are designed to extract information about the behaviour of a model related to a specific observation (or instance).
+- Level of explanation methods:
+  - **Instance-level**: They are designed to extract information about the behaviour of a model related to a specific observation (or instance).
+  - **Dataset-level**: They allow obtaining information about the behaviour of the model for an entire dataset.
 
-- **Dataset-level**: They allow obtaining information about the behaviour of the model for an entire dataset.
-
-## Types of Dependent Variables {-}
-
-- Categorical
-- Continuous
-  - Numbers with an ordering ( _age_ or _number of children_ )
-  - Counts ( _number of floors_ or _number of steps_ )
+- Types of dependent variables
+  - Categorical
+  - Continuous
+    - Numbers with an ordering ( _age_ or _number of children_ )
+    - Counts ( _number of floors_ or _number of steps_ )
   
 ## Glass-box {-}
 
@@ -110,7 +123,8 @@ It is a model that is easy to understand, as it has:
   - Linear models
 - A limited number of coefficients _(not much higher than 10)_
 
-![](img/00-welcome/03-tree-model.png)
+
+![](img/00-welcome/03-tree-model.png){width=37.5% height=60% fig-align="center"}
 
 ## Glass-box benefits {-}
 
@@ -141,13 +155,15 @@ It is a model that is easy to understand, as it has:
 
 - One cannot easily **compare explanations for two models** with different structures.
 
-![](img/00-welcome/04-decision-meme.webp)
+
+![](img/00-welcome/04-decision-meme.webp){width=60% height=40% fig-align="center"}
 
 ## Model-specific Limitations {-}
 
 - We need to create new methods for each new model proposed.
 
-![](img/00-welcome/05-never-ending-work.jpg)
+
+![](img/00-welcome/05-never-ending-work.jpg){width=40% height=60% fig-align="center"}
 
 ## Model-agnostic techniques {-}
 
@@ -155,7 +171,8 @@ It is a model that is easy to understand, as it has:
 
 - We will assume that the model operates on p-dimensional vector of explanatory variables/features and, for a single observation, it **returns a single value (score/probability)**, which is a real number.
 
-![](img/00-welcome/06-win-dance-meme.png)
+
+![](img/00-welcome/06-win-dance-meme.png){width=40% height=80% fig-align="center"}
 
 
 ## Meeting Videos {-}
