@@ -25,7 +25,7 @@ This companion follows the [R4DS Online Learning Community Code of Conduct](http
 
 ## Book club meetings {-}
 
-- Each week, a volunteer will present a chapter from the book after assigning its name in the [Volunteers Spreadsheet](https://docs.google.com/spreadsheets/d/1vGnIw4y2QydGYPjUrPJlToawhLpwDpRPj-yjPl2KZIQ/edit#gid=0)
+- Each week, a volunteer will present a chapter from the book after assigning it to themselves in the [Volunteers Spreadsheet](https://docs.google.com/spreadsheets/d/1vGnIw4y2QydGYPjUrPJlToawhLpwDpRPj-yjPl2KZIQ/edit#gid=0)
   
 -  Presentations: 
    -  Review of material
