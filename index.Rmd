@@ -74,7 +74,7 @@ If you feel comfortable sharing, unmute or raise your hand!
 
 ## Before reading this book {-}
 
--  You should know how to training, re-sampling, evaluating, and tuning models by using packages like:
+-  You should know how to train, re-sample, evaluate, and tune models by using packages like:
   - `CatBoost`
   - `LightGBM`
   - `XGBoost`
