@@ -17,7 +17,7 @@ Welcome to the Explanatory Model Analysis book club!
 
 This website is a companion for the book [_Explanatory Model Analysis_](https://ema.drwhy.ai/) by Przemyslaw Biecek and Tomasz Burzykowski (copyright 2021).
 
-You can find this presentation is available at [r4ds.io/ema](https://r4ds.io/ema).
+You can find this presentation at [r4ds.io/ema](https://r4ds.io/ema).
 
 This website is being developed by the [R4DS Online Learning Community](https://rfordatasci.com). Follow along, and [join the community](https://r4ds.io/join) to participate.
 
