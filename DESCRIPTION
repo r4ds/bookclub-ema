@@ -10,6 +10,10 @@ Depends:
 Imports: 
     bookdown,
     DALEX,
+    data.table,
+    flextable,
+    ggplot2,
     randomForest,
-    rmarkdown
+    rmarkdown,
+    scales
 Encoding: UTF-8
