@@ -225,12 +225,16 @@ plot(bd_rf_noint)
 
 ### Cohort 1 {-}
 
-`r knitr::include_url("https://www.youtube.com/embed/URL")`
+`r knitr::include_url("https://www.youtube.com/embed/KZ9lr9jeMUE")`
 
 <details>
 <summary> Meeting chat log </summary>
 
 ```
-LOG
+0:05:28    Angel Feliz:    start
+00:57:22    Aaron G:    https://christophm.github.io/interpretable-ml-book/
+00:57:26    Aaron G:    interpretable machine book
+00:58:01    Aaron G:    *interpretable machine learning book
+01:00:04    Angel Feliz:    end
 ```
 </details>
