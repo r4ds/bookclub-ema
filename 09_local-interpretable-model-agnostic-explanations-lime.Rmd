@@ -300,12 +300,14 @@ The `age`, `gender` and `class` are correlated, and may partially explain why ex
 
 ### Cohort 1 {-}
 
-`r knitr::include_url("https://www.youtube.com/embed/URL")`
+`r knitr::include_url("https://www.youtube.com/embed/huz9bVCMtrE")`
 
 <details>
 <summary> Meeting chat log </summary>
 
 ```
-LOG
+00:04:43    Ricardo Serrano:    start
+00:51:27    kkim315:    end
+00:52:08    Ricardo Serrano:    stop
 ```
 </details>
