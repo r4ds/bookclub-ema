@@ -89,7 +89,7 @@ It does not describe how do the variables influence the prediction.
 ## Pros and cons {-}
 
 |**Pros**|**BD Plots**|**iBD plots**|**Shapley values**|**LIME**|**CP profiles + oscillations**|
-|:-------|:----------:|:-----------:|:----------------:|:------:|:----------------------------:|
+|:----------------------------------------------------|:-:|:-:|:-:|:-:|:-:|
 |Good for correlated explanatory variables            | | | | | |
 |Not time-consuming for large models                  |X| | |X|-|
 |Sum up to the instance prediction                    |X|X|X| | |
