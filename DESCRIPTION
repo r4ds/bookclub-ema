@@ -17,6 +17,7 @@ Imports:
     flextable,
     ggplot2,
     knitr,
+    lime,
     patchwork,
     randomForest,
     rmarkdown,
