@@ -1,13 +1,18 @@
 # Local-diagnostics Plots
 
-**Learning objectives:**
+**Introduction**
 
-- THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY
+If a model presents a satisfactory **overall predictive performance**, but it's less accurate in some observations. Then we can say that the model **does not cover well** some areas of the **input space**.
 
-## SLIDE 1 {-}
+Local-diagnostics techniques:
 
-- ADD SLIDES AS SECTIONS (`##`).
-- TRY TO KEEP THEM RELATIVELY SLIDE-LIKE; THESE ARE NOTES, NOT THE BOOK ITSELF.
+- *Local-fidelity plots* evaluate the local **predictive performance** of the model around the observation of interest.
+
+- *Local-stability plots* assess the (local) **stability of predictions** around the observation of interest.
+
+
+## Introduction {-}
+
 
 ## Meeting Videos {-}
 
