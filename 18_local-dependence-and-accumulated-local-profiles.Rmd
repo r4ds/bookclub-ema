@@ -48,7 +48,7 @@ set.seed(21965)
 
 x1 <- runif(1000)
 x2 <- runif(1000)
-ex <- rnorm(1000,mean=0,sd=0.1)
+ex <- rnorm(1000, mean=0, sd=0.1)
 yx <- x1+x2+ex
 ```
 
@@ -93,7 +93,21 @@ Counting the number of observations of each group of $X^1$.
 PD profile for $X^1$ (*expected value*).
 
 ```{r}
-(y_mean_matrix %*% x1_dist_matrix) |> round(digits = 1)
+linear_profiles <- (y_mean_matrix %*% x1_dist_matrix) |> round(digits = 1)
+
+colnames(linear_profiles) <- "profiles"
+
+linear_profiles
+```
+
+##  Describing the problem - Linear Example {-}
+
+We could describe the profile by the linear function $0.5+z$.
+
+```{r}
+linear_profiles |>
+  transform(linear_mid_points = c(0.1, 0.3, 0.5, 0.7, 0.9)) |>
+  transform(profile_aprox = 0.5 + linear_mid_points)
 ```
 
 
@@ -163,12 +177,12 @@ PD profile for $X^1$ (*expected value*).
 (same_group_y_mean_filled %*% same_group_x1_dist_matrix) |> round(digits = 2)
 ```
 
-**Now, the obtained profile indicates no effect of X1**.
+**Now, the obtained profile indicates no effect of X1**, which is not true.
 
 
 ##  Describing the problem - Tree Example {-}
 
-The tree is over estimating $Y$ for $x^1 \in [0,0.2]$ and $x^2 \in [0.8,1]$ as it is projecting **1.74** where the true expected value of $Y$ is **0.99**.
+The tree is **over estimating** $Y$ for $x^1 \in [0,0.2]$ and $x^2 \in [0.8,1]$ as it is projecting **1.74** where the true value of $Y$ is **1** the prior model could predict **0.99**.
 
 ```{r}
 library(tree)
@@ -179,14 +193,10 @@ tree_model <- tree(yx ~ x1 + x2, data = same_group_df)
 
 ![](img/18-accumulated-local-profiles/02-tree-intuition.png)
 
-```{r}
-y_mean_matrix
-```
-
 
 ##  Describing the problem - Tree Example {-}
 
-Defining the new breaks for $X^1$.
+Defining the new breaks for $X^1$ based on the `tree` model.
 
 ```{r}
 tree_x1_breaks <-
@@ -195,14 +205,15 @@ tree_x1_breaks <-
   sub(pattern = "x1 (<|>) ", replacement = "") |> 
   as.double() |>
   unique() |>
-  c(0, a = _ ,1)
+  c(0, a = _ ,1) |>
+  unname()
 
-tree_x1_breaks
+round(tree_x1_breaks, 2)
 ```
 
 ##  Describing the problem - Tree Example {-}
 
-PD profile for $X^1$ for the regression tree
+PD profile for $X^1$ for the regression `tree`.
 
 ```{r}
 tree_pdp <-
@@ -212,7 +223,19 @@ tree_pdp <-
   aggregate(x = tree_hat ~ x1c_tree,
             FUN = \(x) mean(x) |> round(digits = 1))
 
+names(tree_pdp)[2] <- "profile"
+
 tree_pdp
+```
+
+##  Describing the problem - Tree Example {-}
+
+Based on the mid point of each break, we can approximate the profiles using the function $2z$, with a **slope larger than the true value of 1**.
+
+```{r}
+tree_pdp |>
+  transform(tree_mid_point = c(0.1, 0.4, 0.8)) |>
+  transform(profile_aprox = 2 * tree_mid_point)
 ```
 
 
