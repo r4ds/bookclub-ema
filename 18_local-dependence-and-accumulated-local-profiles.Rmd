@@ -1,13 +1,22 @@
 ---
-output: html_document
-editor_options: 
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+editor_options:
   chunk_output_type: console
 ---
 # Local-dependence and Accumulated-local Profiles
 
 **Learning objectives:**
 
-- THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY
+* Understand the limitations of Partial-dependence (PD) profiles when dealing with correlated dependent variables.
+* Grasp the concept of Local-dependence (LD) profiles and their ability to address the shortcomings of PD profiles in specific scenarios.
+* Be familiar with Accumulated-local (AL) profiles and their role in summarizing the effect of a variable while averaging out the effects of other variables in additive models.
+* Learn how to identify interactions between explanatory variables by comparing PD, LD, and AL profiles.
+* Gain insights into interpreting the profiles and drawing conclusions about the relationships between variables in a model.
+* Be introduced to the `DALEX` package as a tool for calculating these profiles and the `model_profile` function for different profile types.
+
 
 ## Partial-dependence (PD) profiles {-}
 
@@ -334,7 +343,7 @@ $$
 
 3. Replace the integral in by a summation.
 
-**Nomal**
+**Normal**
 
 \begin{equation}
 \widehat{g}_{AL}^{j}(z) = \sum_{k=1}^{k_j(z)} \frac{1}{n_j(k)} \sum_{i: x_i^j \in N_j(k)} \left\{ f\left(\underline{x}_i^{j| = z_k^j}\right) - f\left(\underline{x}_i^{j| = z_{k-1}^j}\right) \right\} - \hat{c}
@@ -346,6 +355,10 @@ $$
 - $\hat{c}$ is selected so that $\sum_{i=1}^n \widehat{g}_{AL}^{f,j}(x_i^j)=0$
 
 
+## Approximating an AL profile {-}
+
+3. Replace the integral in by a summation.
+
 **Smooth**
 
 \begin{equation}
@@ -356,13 +369,173 @@ $$
 - weight $w_i(z_k)$ captures the distance between point $z_k$ and observation $x_i^j$.
 
 
-## Explore interaction and correlated explanatory variables {-}
+## Example with interactions {-}
+
+If we have the next function:
+
+\begin{equation}
+f(X^1, X^2) = (X^1 + 1)\cdot X^2
+\end{equation}
+
+- $X^1$ and $X^2$ are uniformly distributed over the interval $[-1,1]$
+- $X^1$ and $X^2$ are perfectly correlated, i.e., $X^2 = X^1$. 
+- The sum of the **8 observed** values is equal to 0. 
+
+| i     | 1  |     2 |     3 |     4 |     5 |     6 |     7 |  8  |
+|-------|----|-------|-------|-------|-------|-------|-------|-----|
+| $X^1$ | -1 | -0.71 | -0.43 | -0.14 |  0.14 |  0.43 |  0.71 |  1  |
+| $X^2$ | -1 | -0.71 | -0.43 | -0.14 |  0.14 |  0.43 |  0.71 |  1  |
+| $y$   | 0  | -0.2059 | -0.2451 | -0.1204 |  0.1596 |  0.6149 |  1.2141 |  2  |
+
+## Ceteris-paribus (CP) profiles $X^1$ {-}
+
+We get the CP profiles as straight lines with the slope equal to the value of variable $X^2$.
+
+\begin{equation}
+h^{1}_{CP}(z) = f(z,X^2) = (z+1)\cdot X^2
+\end{equation}
+
+![](img/18-accumulated-local-profiles/03-ceteris-paribus-profiles-interaction.png)
+
+## Partial-dependence (PD) profile for $X^1$ {-}
+
+As the total effect of $X^2$ is $0$ and $X^1$ presents an interaction with that variable, then the average of CP profiles is $0$.
+
+\begin{equation}
+\hat g_{PD}^{1}(z) =  \frac{1}{8} \sum_{i=1}^{8} (z+1)\cdot X^2_{i} = \frac{z+1}{8}  \sum_{i=1}^{8} X^2_{i} = 0
+\end{equation}
+
+![](img/18-accumulated-local-profiles/04-partial-dependence-profiles-interaction.png)
 
 
-## SLIDE 1 {-}
+## Defining local intervals for $X^1$ {-}
 
-- ADD SLIDES AS SECTIONS (`##`).
-- TRY TO KEEP THEM RELATIVELY SLIDE-LIKE; THESE ARE NOTES, NOT THE BOOK ITSELF.
+Let's start dividing $X^1$ in **4 intervals** ($K=4$) to calculate the expected value of the CP profiles on each group. 
+
+![](img/18-accumulated-local-profiles/05-defining-groups.png)
+
+## Local-dependence (PD) profile for $X^1$ {-}
+
+The LD profile for $X^1$ and any $z \in [-1,1]$ is given by
+
+\begin{equation}
+g_{LD}^{1}(z) =  z \cdot (z+1)
+\end{equation}
+
+To average of predictions over the conditional distribution.
+
+![](img/18-accumulated-local-profiles/06-local-dependence-profiles-interaction.png)
+
+## Accumulated-local (AL) profile for $X^1$ {-}
+
+Another alternative to define the effect of the variable.
+
+\begin{align}
+g_{AL}^{1}(z) &= 
+\int_{-1}^z E \left[\frac{\partial f(X^1, X^2)}{\partial X^1} | X^1 = v \right] dv \nonumber \\
+& = \int_{-1}^z E \left[X^2 | X^1 = v \right] dv = 
+\int_{-1}^z v dv =
+(z^2 - 1)/2
+\end{align}
+
+![](img/18-accumulated-local-profiles/07-accumulated-local-profiles-interection.png)
+
+
+## Example: apartment-prices data {-}
+
+With the `apartments_rf` we want to predict the **price per square meter** of an apartment and we want to explore the impact of **surface** and **number of rooms**, as they are correlated.
+
+- The LD profiles are **steeper** than the PD profiles.
+  - The effect of *surface* includes the effect of **other correlated variables**.
+  
+- The AL and PD profiles are parallel to each other.
+  - Suggest that **the model is additive** for these two explanatory variables.
+
+![](img/18-accumulated-local-profiles/08-random-forest-aparment-profiles.png){width=60% height=60%}
+
+## Interpretation tips {-}
+
+- If the **CP profiles** are parallel and **PD profile** adequately summarizes them:
+  - Explanatory variables are independent (not correlated)
+  - There are no interactions in the model
+  
+- By comparing PD, LD, and AL profiles may help in Identifying:
+  - Whether explanatory variables are **correlated** (PD vs LD).
+  - Whether there are any **interactions** in the model (PD vs AL).
+  
+- Only the **AL profile** will provide a correct summary of the effect.
+  - If the model is **additive**
+  - Some explanatory variables are **correlated**
+  
+When there are **interactions** in the model, **none of the profiles** will provide a correct assessment:
+  - Use a generalization of the PD profiles for **two or more dependent** variables.
+
+## `DALEX` as wrapper of `ingredients` {-}
+
+```{r message=FALSE}
+library("DALEX")
+library("randomForest")
+apartments_rf <- archivist::aread("pbiecek/models/fe7a5")
+explainer_apart_rf <- DALEX::explain(model = apartments_rf, 
+                             data    = apartments_test[,-1],
+                             y       = apartments_test$m2.price, 
+                             label   = "Random Forest")
+```
+
+## model_profile function {-}
+
+It allows the computation of:
+
+- PD (`type = "partial"`)
+
+```{r}
+pd_rf <- model_profile(explainer = explainer_apart_rf,
+                       type = "partial",
+                       variables = c("no.rooms", "surface"))
+```
+
+- LD (`type = "conditional"`) 
+
+```{r}
+ld_rf <- model_profile(explainer = explainer_apart_rf,
+                       type      = "conditional",
+                       variables = c("no.rooms", "surface"))
+```
+
+
+- AL (`type = "accumulated"`) 
+
+```{r}
+al_rf <- model_profile(explainer = explainer_apart_rf,
+                       type = "accumulated",
+                       variables = c("no.rooms", "surface"))
+```
+
+
+## Creating LD plot {-}
+
+```{r}
+plot(ld_rf) +
+  ggplot2::ggtitle("Local-dependence profiles for no. of rooms and surface", "")
+```
+
+
+## Creating AL plot {-}
+
+```{r}
+plot(al_rf) +
+  ggplot2::ggtitle("Accumulated-local profiles for no. of rooms and surface", "")
+```
+
+## Creating all profiles plot {-}
+
+```{r}
+pd_rf$agr_profiles$`_label_` = "partial dependence"
+ld_rf$agr_profiles$`_label_` = "local dependence"
+al_rf$agr_profiles$`_label_` = "accumulated local"
+
+plot(pd_rf, ld_rf, al_rf) 
+```
 
 ## Meeting Videos {-}
 
