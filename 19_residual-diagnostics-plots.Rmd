@@ -1,13 +1,144 @@
-# Residual-diagnostics Plots
+# Residual-Diagnostics Plots
 
-**Learning objectives:**
+**Learning Objectives:**
 
-- THESE ARE NICE TO HAVE BUT NOT ABSOLUTELY NECESSARY
+This section presents graphical methods for a detailed examination of **model performance** at both **overall** and **instance-specific levels**.
 
-## SLIDE 1 {-}
+- Residuals can be utilized to:
+  - **Identify potentially problematic instances**. This can help define which factors contribute most significantly to prediction errors.
+  - **Detect any systematic deviations from the expected behavior** that could be due to:
+    - The omission of explanatory variables
+    - The inclusion of a variable in an incorrect functional form.
+  - **Identify the largest prediction errors**, irrespective of the overall performance of a predictive model.
 
-- ADD SLIDES AS SECTIONS (`##`).
-- TRY TO KEEP THEM RELATIVELY SLIDE-LIKE; THESE ARE NOTES, NOT THE BOOK ITSELF.
+
+## Quality of predictions {-}
+
+- In a **"perfect" predictive model** `predicted value` == `actual value` of the variable for every observation.
+
+- We want the predictions to be **reasonably close** to the actual values.
+
+- To quantify the **quality of predictions** we can use the _difference_ between the `predicted value` and the `actual value`called as **residual**.
+
+For a continuous dependent variable $Y$, residual $r_i$ for the $i$-th observation in a dataset:
+
+\begin{equation}
+r_i = y_i - f(\underline{x}_i) = y_i - \widehat{y}_i
+\end{equation}
+
+
+## Characteristics of a good model {-}
+
+To evaluate a model we need to study the *"behavior" of residuals* for a group of observations. To confirm that:
+
+- They are **deviating from zero randomly** implying that:
+  - Their distribution should be **symmetric around zero**, so their mean (or median) value should be zero.
+  - Their values most be **close to zero** to show low variability.
+
+
+## Graphical methods to verify proporties {-}
+
+- **Histogram**: To check the **symmetry** and **location** of the distribution of residuals *without any assumption*.
+
+- **Quantile-quantile plot**: To check whether the residuals follow a concrete distribution.
+
+![Source: https://rpubs.com/stevenlsenior/normal_residuals_with_code](img/19-residual-diagnostics-plots/01-histogram-quantile-plot.png)
+
+
+## Standardized *(Pearson)* residuals {-}
+
+\begin{equation}
+\tilde{r}_i = \frac{r_i}{\sqrt{\mbox{Var}(r_i)}}
+\end{equation}
+
+where $\mbox{Var}(r_i)$ is the **estimated variance** of the residual $r_i$. 
+
+|**Model**|**Estimation Method**|
+|:--------|:--------------------|
+|Classical linear-regression model|The design matrix.|
+|Poisson regression|$f(\underline{x}_i)$, i.e., the expected value of the count.|
+|Complicated models|A constant for all residuals.|
+
+
+## Exploring residuals for classification models {-}
+
+- Due their range ($[-1,1]$) limitations, the residuals $r_i$ are not very useful to explore the probability of observing $y_i$.
+
+- If **all explanatory variables are categorical** with a limited number of categories the **standard-normal approximation** is likely if follow the following steps:
+  - Divide the observed values in $K$ groups sharing the same predicted value $f_k$.
+  - Average the residuals $r_i$ per group and standardizing them with $\sqrt{f_k(1-f_k)/n_k}$
+  
+## Exploring residuals for classification models {-}
+  
+In datasets, where different observations lead to **different model predictions** the *Pearson residuals* will **not** be approximated by the **standard-normal** one.
+
+But the **index plot** may still be useful to detect observations with **large residuals**.
+
+![Source: http://www.philender.com/courses/linearmodels/notes1/index.html](img/19-residual-diagnostics-plots/02-index-plot.png){width=45% height=60%}
+
+## Exploring residuals for classical linear-regression models {-}
+
+- Residuals should be normally distributed with mean zero
+- The leverage values from the diagonal of hat matrix $\mathbf{H} = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$.
+
+$$
+\mathbf{\hat{y}} = 
+\mathbf{X}\hat{\beta} = 
+\mathbf{X}[(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}] = 
+\mathbf{H}\mathbf{y}
+$$
+
+
+- Expected variance given by: $\text{Var}(e_i) = \sigma^2 (1 - h_{ii})$
+- For independent explanatory variables, it should lead to a constant variance of residuals.
+
+## Residuals $r_i$ in function of predicted values {-}
+
+The plot should show points scattered **symmetrically** around the horizontal **straight line at 0**, but:
+
+- It has got a shape of a funnel, reflecting **increasing variability** of residuals for increasing fitted values. The variance is not constant *(homoscedasticity violation)*.
+
+- The smoothed line suggests that the mean of residuals becomes **increasingly positive** for increasing fitted values. The residuals don't seems to have a *zero-mean*.
+
+![](img/19-residual-diagnostics-plots/03-residuals-vs-fitted.png){width=45% height=60%}
+
+## Square root of standardized residuals $\sqrt{\tilde{r}_i}$ in function of predicted values {-}
+
+The plot should show points scattered **symmetrically** across the horizontal axis.
+
+- The increase in $\sqrt{\tilde{r}_i}$ indicates a violation of the *homoscedasticity assumption*.
+
+![](img/19-residual-diagnostics-plots/04-scale-location.png){width=45% height=60%}
+
+## Standardized residuals $\tilde{r}_i$ in function of leverage $l_i$ {-}
+
+- **Leverage** $l_i$ is a measure of how far away the **independent variable values** of an observation are from those of the other observations. 
+
+- Data points with **large residuals (outliers)** and/or **high leverage** may distort the outcome and **accuracy of a regression**.
+
+- The **predicted sum-of-squares**:
+
+\begin{equation}
+PRESS = \sum_{i=1}^{n} (\widehat{y}_{i(-i)} - y_i)^2 =  \sum_{i=1}^{n} \frac{r_i^2}{(1-l_{i})^2}
+\end{equation}
+
+- **Cook's distance** measures the effect of deleting a given observation. 
+
+![](img/19-residual-diagnostics-plots/05-residuals-vs-leverage.png){width=45% height=60%}
+
+## Standardized residuals $\tilde{r}_i$ in function of leverage $l_i$ {-}
+
+Given that $\tilde{r}_i$ should have approximately **standard-normal distribution**, only about 0.5% of them should be **larger or lower than 2.57**.
+
+If there is an **excess of such observations**, this could be taken as a signal of issues with the **fit of the model**. At least two such observations (59 and 143).
+
+![](img/19-residual-diagnostics-plots/05-residuals-vs-leverage.png){width=45% height=60%}
+
+## Standardized residuals $\tilde{r}_i$ in function of values expected from the standard normal distribution {-}
+
+If the normality assumption is fulfilled, the plot should show a scatter of points close to the $45^{\circ}$ diagonal, but **this not the case**.
+
+![](img/19-residual-diagnostics-plots/06-normal-q-q.png){width=45% height=60%}
 
 ## Meeting Videos {-}
 
