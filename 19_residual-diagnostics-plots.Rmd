@@ -54,7 +54,7 @@ where $\mbox{Var}(r_i)$ is the **estimated variance** of the residual $r_i$.
 | **Model**                         | **Estimation Method**                                        |
 |:-------------------------|:---------------------------------------------|
 | Classical linear-regression model | The design matrix.                                           |
-| Poisson regression                | $f(\underline{x}_i)$, i.e., the expected value of the count. |
+| Poisson regression                | The expected value of the count.                             |
 | Complicated models                | A constant for all residuals.                                |
 
 ## Exploring residuals for classification models {-}
@@ -146,17 +146,21 @@ Both models have almost the same performance.
 library("DALEX")
 library("randomForest")
 
+
 model_apart_lm <- archivist::aread("pbiecek/models/55f19")
+model_apart_rf <- archivist::aread("pbiecek/models/fe7a5")
+
+
 explain_apart_lm <- DALEX::explain(model = model_apart_lm, 
                                    data    = apartments_test[,-1], 
                                    y       = apartments_test$m2.price, 
                                    label   = "Linear Regression")
 
-model_apart_rf <- archivist::aread("pbiecek/models/fe7a5")
 explain_apart_rf <- DALEX::explain(model = model_apart_rf, 
                            data    = apartments_test[,-1], 
                            y       = apartments_test$m2.price, 
                            label   = "Random Forest")
+
 
 mr_lm <- DALEX::model_performance(explain_apart_lm)
 mr_rf <- DALEX::model_performance(explain_apart_rf)
@@ -222,6 +226,8 @@ plot(pdp_rf_year, pdp_lm_year)
 
 ## Random Forest: Residuals $r_i$ in function of observed values {-}
 
+> The random forest model, as the linear-regression model, assumes that residuals should be homoscedastic, i.e., that they should have a constant variance.
+
 The plot suggests that the predictions are shifted (biased) towards the average.
 
 - For large observed the residuals are positive.
@@ -232,6 +238,8 @@ md_rf <- model_diagnostics(explain_apart_rf)
 
 plot(md_rf, variable = "y", yvariable = "residuals") 
 ```
+
+> For models like linear regression, such heteroscedasticity of the residuals would be worrying. In random forest models, however, it may be less of concern.
 
 ## Random Forest: Predicted in function of observed values {-}
 
@@ -247,13 +255,51 @@ plot(md_rf, variable = "y", yvariable = "y_hat") +
 
 ## Random Forest: Residuals $r_i$ in function of an (arbitrary) identifier of the observation {-}
 
-The plot indicates an asymmetric distribution of residuals around zero, as there is an excess of large positive (larger than 500) residuals 
+The plot indicates:
+
+- An **asymmetric** distribution of residuals around zero
+- An **excess** of large positive (larger than 500) residuals without a corresponding fraction of negative values.
 
 ```{r}
 plot(md_rf, variable = "ids", yvariable = "residuals")
 ```
 
+## Random Forest: Residuals $r_i$ in function of predicted value {-}
 
+It suggests that the predictions are shifted (biased) towards the average.
+
+```{r}
+plot(md_rf, variable = "y_hat", yvariable = "residuals")
+```
+
+## Random Forest: Absolute value of residuals  in function of the predicted {-}
+
+> Variant of the scale-location plot
+
+- For homoscedastic residuals, we would expect a symmetric scatter around a horizontal line; the smoothed trend should be also horizontal.
+
+- The deviates from the expected pattern and indicates that the variability of the residuals depends on the (predicted) value of the dependent variable.
+
+```{r}
+plot(md_rf, variable = "y_hat", yvariable = "abs_residuals")
+```
+
+## Pros and cons {-}
+
+- Diagnostic methods based on residuals are a very useful to identify:
+
+    -  Problems with distributional assumptions.
+    
+    -  Problems with the assumed structure of the model *(in terms of the selection of the explanatory variables and their form)*.
+    
+    -  Groups of observations for which a model’s predictions are biased.
+
+
+- It presents the following limitations:
+
+    -  Interpretation of the patterns seen in *graphs may not be straightforward*.
+    
+    -  It's not be immediately obvious *which element of the model* may have to be changed.
 
 ## Meeting Videos {-}
 
