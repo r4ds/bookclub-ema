@@ -134,7 +134,7 @@ Below we compare the PDP output for from two predictive models: a basic linear r
 
 We use the titanic dataset and a random forest model.
 
-```{r load-data, warning=FALSE, message=FALSE, results='hide'}
+```{r 17-load-data, warning=FALSE, message=FALSE, results='hide'}
 library("DALEX")
 library("randomForest")
 titanic_imputed <- archivist::aread("pbiecek/models/27e5c")
