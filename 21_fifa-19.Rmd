@@ -375,7 +375,7 @@ plot(fifa_mp_gbm_shallow, fifa_mp_gbm_deep, fifa_mp_rf, fifa_mp_rm,
 
 **Partial Dependence Profiles**  
   
-```{r pdp}
+```{r fifa-pdp}
 selected_variables <- c("movement_reactions", "skill_ball_control", "skill_dribbling", "age")
 
 fifa19_pd_shallow <- model_profile(fifa_gbm_exp_shallow, 
